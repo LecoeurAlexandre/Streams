@@ -6,6 +6,7 @@ import org.example.streams.Student;
 import org.example.streams.Teacher;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,20 @@ public class Main {
                 .sorted()
                 .collect(Collectors.toList());
         System.out.println("Les cours de plus de 11h : "+longCourses);
+
+        // Récupérer liste des cours en passant par student
+        List allCoursesbyStudents = students.stream()
+                .map(c-> c.getCourses())
+                .collect(Collectors.toList());
+        System.out.println(allCoursesbyStudents);
+
+        //Récupérer une liste de cours triée par ordre alphabétique des étudiants entre 18 et 20 ans
+        List<Course> youngStudentsCourses = students.stream()
+                .filter(student -> student.getAge()>=18 & student.getAge()<=20)
+                .flatMap(student -> student.getCourses().stream())// création d'un nouveau stream avec flatMap, car on itère sur une collection
+                .sorted(Comparator.comparing(Course::getName))
+                .collect(Collectors.toList());
+        System.out.println("Liste des cours par ordre alphabétique des étudiants entre 18 et 20 ans : "+ youngStudentsCourses);
 
     }
 }
